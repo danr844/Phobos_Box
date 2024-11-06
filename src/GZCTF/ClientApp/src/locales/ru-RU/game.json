@@ -1,0 +1,245 @@
+{
+  "button": {
+    "challenges": "Задания",
+    "delete": {
+      "all_traffic": "Удалить перечисленный трафик"
+    },
+    "download": {
+      "all_traffic": "Скачать перечисленный трафик",
+      "scoreboard": "Рейтинг CSV",
+      "submissionsheet": "Отправления"
+    },
+    "finished": "Игра завершилась",
+    "hide_solved": "Спрятать решенные",
+    "join": "Вступить",
+    "leave": "Покинуть",
+    "login_required": "Требуется авторизация",
+    "scoreboard": "Рейтинг",
+    "submit_writeup": "Отправить",
+    "writeup": {
+      "upload": "Загрузить",
+      "uploading": "Загрузка..."
+    }
+  },
+  "content": {
+    "all_solved": {
+      "comment": "Кажется, вы всё решили. Возможно, более сложные задания появятся позже...",
+      "title": "Все задания решены!"
+    },
+    "duration": "{{hours}} час(-а/-ов)",
+    "end_at": "Ends at",
+    "end_time": "Завершение",
+    "game_ended": "Завершено",
+    "game_lasts_long": "Эта игра ещё не скоро завершится",
+    "hide_container_events": {
+      "description": "Спрятать события создания/уничтожения контейнеров",
+      "label": "Спрятать события контейнеров"
+    },
+    "join": {
+      "confirm": "Подтвердите регистрацию",
+      "content": [
+        "Вы уверены, что хотите зарегистрироваться для участия в этой игре?",
+        "After successfully registering for the competition and passing the review, the team will be locked and <strong>you will no longer be able to remove any member from the team.</strong> The team will be unlocked after the match ends or when the participation request is rejected.",
+        "The limit on the number of players refers to the number of members that have decided to participate as part of the specific team, <strong>regardless of which team you choose to play with.</strong>"
+      ],
+      "invite_code": {
+        "description": "This game is invitation-only. To participate in, please enter an invitation code.",
+        "label": "Введите код приглашения"
+      },
+      "organization": {
+        "description": "This game has multiple division available. Please select your division.",
+        "label": "Выберите подразделение"
+      },
+      "team": {
+        "description": "Please select a team you want to participate with in this game. This cannot be changed after participation request approval.",
+        "label": "Выберите команду"
+      },
+      "title": "Registration Information"
+    },
+    "joined_status": "<strong>{{count}}</strong> teams have already joined",
+    "leave": {
+      "confirm": "Confirm quitting",
+      "content": [
+        "Are you sure you want to quit this game?",
+        "If the number of team members is zero after you quit, the team's participation data will be deleted."
+      ]
+    },
+    "no_challenge": "Жаль, но у этой игры ещё нет доступных заданий.",
+    "no_cheat": {
+      "comment": "Похоже, все играют честно (наверное)!",
+      "title": "Флаг-шейринг не обнаружен"
+    },
+    "no_notice": "Уведомлений нет.",
+    "no_traffic": {
+      "comment": "Both platform and challenge need to be set up to enable capture",
+      "title": "No challenge has traffic capture enabled"
+    },
+    "remaining_duration": "{{hours}}h left",
+    "remaining_time": "Remaining time",
+    "scoreboard_not_ready": {
+      "comment": "Patience is a virtue, please hold on…",
+      "title": "Загрузка рейтинга..."
+    },
+    "scoreboard_note": "Note: teams with same score are ranked by submission time.",
+    "scoreboard_tip": "Tip: Scroll through the list of challenges with left and right arrow!",
+    "start_at": "Starts at",
+    "start_time": "Начало",
+    "team_view": {
+      "description": "Display cheating information by teams",
+      "label": "View as Team"
+    },
+    "total_duration": "{{hours}}h in total",
+    "total_time": "Duration",
+    "traffic": {
+      "delete_confirm": "Delete this traffic file?",
+      "deleted_all_confirm": "Delete all listed traffic?"
+    },
+    "writeup": {
+      "current": "Current Writeup",
+      "deadline_exceeded": "Submission deadline has passed",
+      "instructions": {
+        "additional": "Additional Notes",
+        "deadline": "Please submit the writeup before <1>{{datetime}}</1>, overdue or non-submissions will be considered as giving up the results of this game.",
+        "file_format": "Please organize the writeup of all solved challenges into <1>a standard PDF document less than 20MB</1>.",
+        "title": "Submission Instructions"
+      },
+      "submitted": "Successfully submitted",
+      "title": "Writeup Management",
+      "unsubmitted": "Not yet submitted",
+      "unsubmitted_note": "Your team has not submitted yet"
+    }
+  },
+  "event": {
+    "answer": {
+      "accepted": "Флаг принят",
+      "cheat": "Флаг-шейринг",
+      "not_found": "Unknown",
+      "submitted": "Успешно отправлено",
+      "wrong": "Неверный флаг"
+    },
+    "cheat_detected": "Cheat detected in challenge {{chal}}, team {{team}} used {{steam}}'s flag.",
+    "container": {
+      "destroy": "Destroyed challenge instance for {{chal}}#{{id}}",
+      "start": "Created challenge instance for {{chal}}#{{id}}"
+    },
+    "flag_submit": "[{{status}}] {{flag}} [{{chal}}#{{id}}]"
+  },
+  "label": {
+    "cheat_info": {
+      "owned_team": "Source Team",
+      "submit_team": "Submit Team",
+      "submit_user": "Submit User"
+    },
+    "notice_type": {
+      "all": "All",
+      "challenge": "Challenge",
+      "events": "News",
+      "game": "Notice"
+    },
+    "score": "Score",
+    "score_formatter": "{value} pts",
+    "score_table": {
+      "rank_organization": "Rank",
+      "rank_total": "Overall",
+      "score": "Score",
+      "score_total": "Score",
+      "solved_count": "Решено",
+      "team": "Команда",
+      "type": "Тип"
+    },
+    "traffic": "Трафик"
+  },
+  "notice": {
+    "blood": "Congratulations to {{team}} for the {{blood}} on {{chal}}.",
+    "new_challenge": "New challenge [{{title}}] has been released.",
+    "new_hint": "Hints for [{{title}}] has been updated."
+  },
+  "notification": {
+    "connected": {
+      "event": "Real-time event connected",
+      "submission": "Real-time submission connected"
+    },
+    "ended": "The game has ended",
+    "fetch_failed": {
+      "event": "Failed to fetch events",
+      "notice": "Failed to fetch notifications",
+      "submission": "Failed to fetch submissions"
+    },
+    "joined": "Registration successful",
+    "left": "Successfully cancel",
+    "no_invite_code": "Invitation code cannot be empty",
+    "no_organization": "Please select the division",
+    "no_team": "Please select the team to participate with",
+    "not_started": "Игра ещё не началась",
+    "select_chal_and_part": "Please select challenges and teams first",
+    "suspended": "You have been banned",
+    "traffic": {
+      "deleted": "Traffic file(s) has been deleted"
+    },
+    "writeup": {
+      "submitted": "Writeup was successfully submitted"
+    }
+  },
+  "participation": {
+    "actions": {
+      "accepted": "Approved",
+      "pending": "Pending review",
+      "rejected": "Re-Sign Up",
+      "suspended": "Banned",
+      "unsubmitted": "Join game"
+    },
+    "alert": {
+      "not_started": {
+        "content": "You have successfully registered and passed the review as a member of team {{team}}. Please wait for the game start.",
+        "mobile": "Please use desktop site to see the details of the game.",
+        "title": "Игра ещё не началась"
+      },
+      "pending": {
+        "content": "Please wait for review results",
+        "title": "You have successfully registered as a member of team {{team}}"
+      },
+      "rejected": {
+        "content": "Please make sure you are eligible to register in the game and re-register after you meet the requirements",
+        "title": "Your participating request was rejected"
+      },
+      "suspended": {
+        "content": "If you have any objections, please contact the administrator to appeal.",
+        "title": "Your team {{team}} has been suspended"
+      },
+      "team_required": {
+        "content": "You didn't join any team, please create or join a team on the <1> Team Management </1> page.",
+        "title": "Невозможно зарегистрироваться"
+      }
+    },
+    "status": {
+      "accepted": "Approved",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "suspended": "Banned"
+    }
+  },
+  "placeholder": {
+    "no_solved": "Ouch! This team has not solved any challenges...",
+    "search_team": "Поиск команды"
+  },
+  "tab": {
+    "challenge": "Задания",
+    "monitor": {
+      "cheatinfo": "Флаг-шейринг",
+      "events": "События",
+      "index": "Монитор",
+      "submissions": "Отправления",
+      "traffic": "Трафик"
+    },
+    "scoreboard": "Рейтинг"
+  },
+  "tag": {
+    "hidden": "Hidden",
+    "individual": "Индивидуальный",
+    "limited": "{{count}} игроков",
+    "multiplayer": "Командный"
+  },
+  "title": {
+    "index": "Игры"
+  }
+}
