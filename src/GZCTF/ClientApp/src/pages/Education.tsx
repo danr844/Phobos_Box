@@ -10,7 +10,7 @@ const Education: React.FC = () => {
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const customAxios = axios.create({
-    baseURL: 'http://127.0.0.1:5000',
+    baseURL: 'http://chatapi:5000',
   });
 
   const handleTopicSelection = async (topic: string) => {
@@ -21,10 +21,24 @@ const Education: React.FC = () => {
       const response = await customAxios.post('/api/question', {
         question: `Dame un contenido de máximo 300 caracteres sobre ${topic} detallado y claro, en formato HTML`
       });
+      console.log("Respuesta de la API:", response.data);
       setContent(response.data.answer);
-    } catch (error) {
-      console.error("Error al obtener el contenido:", error);
-      setContent("Hubo un problema al cargar el contenido. Por favor, inténtalo de nuevo." + String(error.stack));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        // Imprime el error completo en la consola
+        console.error("Error de Axios:", error.toJSON ? error.toJSON() : error);
+
+        // Muestra más detalles del error en la interfaz
+        setContent(
+          `Error: ${error.message}. ` +
+          (error.response ? `Status: ${error.response.status}. Data: ${JSON.stringify(error.response.data)}` : "No response received.")
+        );
+      } else if (error instanceof Error) {
+        console.error("Error general:", error);
+        setContent(`Error: ${error.message}`);
+      } else {
+        setContent("Hubo un problema al cargar el contenido. Por favor, inténtalo de nuevo.");
+      }
     } finally {
       setLoading(false);
     }
@@ -36,7 +50,7 @@ const Education: React.FC = () => {
         <div>
           <div>
             <Title order={1}>Selecciona un tema de aprendizaje</Title>
-            <br></br>
+            <br />
           </div>
           <Group>
             {topics.map((topic) => (
@@ -45,7 +59,7 @@ const Education: React.FC = () => {
               </Button>
             ))}
           </Group>
-          <br></br>
+          <br />
           {selectedTopic && (
             <div>
               <Title order={2}>{selectedTopic}</Title>
