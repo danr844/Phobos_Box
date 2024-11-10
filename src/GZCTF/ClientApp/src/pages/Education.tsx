@@ -10,7 +10,7 @@ const Education: React.FC = () => {
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const customAxios = axios.create({
-    baseURL: 'http://chatapi:5000',
+    baseURL: 'http://localhost',
   });
 
   const handleTopicSelection = async (topic: string) => {

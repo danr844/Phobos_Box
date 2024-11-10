@@ -12,7 +12,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
 
   const TARGET = env.VITE_BACKEND_URL ?? 'http://localhost:55000'
-
   return {
     server: {
       port: 63000,
