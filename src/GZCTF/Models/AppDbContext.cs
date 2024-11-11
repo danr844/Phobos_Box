@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
+using GZCTF.Services;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -8,6 +11,24 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GZCTF.Models;
 
+public class UserProgress
+{
+    [Key]
+    public Guid Id { get; set; } // Clave primaria
+
+    [Required]
+    public Guid UserId { get; set; } // Clave foránea para UserInfo
+
+    [Required]
+    public string Topic { get; set; } = default!; // Tema de aprendizaje
+
+    public int Progress { get; set; } // Progreso en porcentaje
+
+    [ForeignKey("UserId")]
+    public virtual UserInfo User { get; set; } = default!; // Relación con UserInfo
+
+
+}
 public class AppDbContext(DbContextOptions<AppDbContext> options) :
     IdentityDbContext<UserInfo, IdentityRole<Guid>, Guid>(options), IDataProtectionKeyContext
 {
@@ -33,6 +54,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) :
     public DbSet<UserParticipation> UserParticipations { get; set; } = default!;
     public DbSet<ExerciseDependency> ExerciseDependencies { get; set; } = default!;
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = default!;
+
+    public DbSet<UserProgress> UserProgresses { get; set; } = default!;
 
     static ValueConverter<T?, string> GetJsonConverter<T>() where T : class, new() =>
         new(
@@ -380,6 +403,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) :
                 .HasForeignKey(e => e.GameId);
 
             entity.HasKey(e => new { e.GameId, e.TeamId, e.UserId });
+        });
+        builder.Entity<UserProgress>(entity =>
+        {
+        entity.HasKey(e => e.Id); // Define la clave primaria
+        entity.HasOne(e => e.User)
+              .WithMany()
+              .HasForeignKey(e => e.UserId)
+              .OnDelete(DeleteBehavior.Cascade); // Relación con UserInfo
         });
     }
 }

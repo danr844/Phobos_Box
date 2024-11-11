@@ -97,8 +97,19 @@ if (GZCTF.Program.IsTesting || (builder.Environment.IsDevelopment() &&
                                 !builder.Configuration.GetSection("ConnectionStrings").Exists()))
 {
     builder.Services.AddDbContext<AppDbContext>(
-        options => options.UseInMemoryDatabase("TestDb")
-    );
+    options =>
+    {
+        options.UseNpgsql(builder.Configuration.GetConnectionString("Database"),
+            o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+
+        if (builder.Environment.IsDevelopment())
+        {
+            options.EnableSensitiveDataLogging();
+            options.EnableDetailedErrors();
+        }
+    }
+);
+
 }
 else
 {
@@ -272,6 +283,7 @@ builder.Services.AddScoped<IGameChallengeRepository, GameChallengeRepository>();
 builder.Services.AddScoped<IParticipationRepository, ParticipationRepository>();
 builder.Services.AddScoped<IExerciseInstanceRepository, ExerciseInstanceRepository>();
 builder.Services.AddScoped<IExerciseChallengeRepository, ExerciseChallengeRepository>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 
 builder.Services.AddScoped<ExcelHelper>();
 
@@ -282,6 +294,7 @@ builder.Services.AddSingleton<CacheHelper>();
 builder.Services.AddHostedService<CacheMaker>();
 builder.Services.AddHostedService<FlagChecker>();
 builder.Services.AddHostedService<CronJobService>();
+builder.Services.AddRecommendationService();
 
 builder.Services.AddHealthChecks();
 builder.Services.AddRateLimiter(RateLimiter.ConfigureRateLimiter);

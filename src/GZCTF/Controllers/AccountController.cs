@@ -4,6 +4,7 @@ using GZCTF.Middlewares;
 using GZCTF.Models.Internal;
 using GZCTF.Models.Request.Account;
 using GZCTF.Repositories.Interface;
+using GZCTF.Services;
 using GZCTF.Services.Mail;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +31,12 @@ public class AccountController(
     UserManager<UserInfo> userManager,
     SignInManager<UserInfo> signInManager,
     ILogger<AccountController> logger,
-    IStringLocalizer<Program> localizer) : ControllerBase
+    IStringLocalizer<Program> localizer,
+    IRecommendationService recommendationService) : ControllerBase
 {
+    private readonly IRecommendationService _recommendationService = recommendationService;
+    private readonly ILogger<AccountController> _logger = logger;
+
     /// <summary>
     /// 用户注册接口
     /// </summary>
@@ -120,6 +125,69 @@ public class AccountController(
             RegisterStatus.EmailConfirmationRequired, StatusCodes.Status200OK));
     }
 
+    /// <summary>
+    /// 获取用户推荐内容接口
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <response code="200">成功获取推荐内容</response>
+    /// <response code="400">缺少用户ID</response>
+    [HttpGet("recommendations")]
+    [ProducesResponseType(typeof(RequestResponse<List<string>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RequestResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetRecommendations([FromQuery] string userId)
+    {
+        if (string.IsNullOrEmpty(userId))
+        {
+            return BadRequest(new RequestResponse("El userId es obligatorio."));
+        }
+
+        try
+        {
+            var recommendations = await _recommendationService.GetRecommendationsForUser(userId);
+            return Ok(new RequestResponse<List<string>>("Recomendaciones obtenidas exitosamente.", recommendations));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error al obtener recomendaciones para el usuario {userId}");
+            return StatusCode(StatusCodes.Status500InternalServerError, new RequestResponse("Error interno del servidor."));
+        }
+    }
+
+    /// <summary>
+    /// 更新用户进度接口
+    /// </summary>
+    /// <param name="model"></param>
+    /// <response code="200">用户进度更新成功</response>
+    /// <response code="400">用户ID或主题缺失</response>
+    [HttpPost("updateProgress")]
+    [ProducesResponseType(typeof(RequestResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RequestResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateProgress([FromBody] UpdateProgressModel model)
+    {
+        if (string.IsNullOrEmpty(model.UserId) || string.IsNullOrEmpty(model.Topic))
+        {
+            return BadRequest(new RequestResponse("UserId y Topic son obligatorios."));
+        }
+
+        try
+        {
+            await _recommendationService.UpdateUserProgress(model.UserId, model.Topic, model.Progress);
+            return Ok(new RequestResponse("Progreso actualizado exitosamente."));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error al actualizar el progreso para el usuario {model.UserId}");
+            return StatusCode(StatusCodes.Status500InternalServerError, new RequestResponse("Error interno del servidor."));
+        }
+    }
+
+    public class UpdateProgressModel
+    {
+        public string UserId { get; set; }
+        public string Topic { get; set; }
+        public int Progress { get; set; }
+    }
+
     bool VerifyEmailDomain(string email)
     {
         var mailDomain = email.Split('@')[1];
@@ -129,7 +197,6 @@ public class AccountController(
                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                    .Any(d => d.Equals(mailDomain, StringComparison.InvariantCulture));
     }
-
     /// <summary>
     /// 用户找回密码请求接口
     /// </summary>
