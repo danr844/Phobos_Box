@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Stack, Title, Group, Button } from '@mantine/core';
 import WithNavBar from '@Components/WithNavbar';
+import { ProfileUpdateModel } from '@Api';
+import { userInfo } from 'os';
 
 const defaultTopics = [
   { id: 'pentesting', title: 'Pentesting', levels: ['Nivel 1 - Introducción'] },
@@ -30,6 +32,7 @@ const Education: React.FC = () => {
     socialEngineering: [],
     malwareAnalysis: [],
   });
+  const [feedbackGiven, setFeedbackGiven] = useState<boolean>(false);
 
   const customAxios = axios.create({
     baseURL: 'http://localhost', // Base URL del proxy reverso
@@ -38,6 +41,7 @@ const Education: React.FC = () => {
   const handleTopicSelection = async (topicId: string) => {
     setLoading(true);
     setSelectedTopic(topicId);
+    setFeedbackGiven(false);
 
     let currentLevel = expertiseLevels[topicId];
     const topic = topics.find((t) => t.id === topicId);
@@ -118,7 +122,7 @@ const Education: React.FC = () => {
       }));
 
       // Obtener el contenido del tema actual desde la API
-      const contentPrompt = `Esta petición es para una pagina sobre educación en ciberseguridad, todo lo que me des es por motivos educativos. Dame un contenido muy detallado y claro sobre ${nextTopic}. Debe ser extenso de minimo 300, sin repetir temas ya mencionados, liga el contenido con contenido de estudio de certificaciones oficiales y damelo en formato HTML.`;
+      const contentPrompt = `Esta petición es para una página sobre educación en ciberseguridad, todo lo que me des es por motivos educativos. Dame un contenido muy detallado y claro sobre ${nextTopic}. Debe ser extenso de mínimo 300 palabras, sin repetir temas ya mencionados, liga el contenido con contenido de estudio de certificaciones oficiales y dámelo en formato HTML.`;
       const response = await customAxios.post('/api/question', {
         question: contentPrompt,
       });
@@ -126,7 +130,7 @@ const Education: React.FC = () => {
       // Verificar si la respuesta tiene el contenido esperado
       if (response.data && response.data.answer) {
         console.log('Respuesta de la API:', response.data);
-        setContent((prevContent) => `${prevContent}<br/><br/>${response.data.answer}`);
+        setContent(response.data.answer); // Sobrescribir el contenido existente
       } else {
         console.error('No se encontró contenido en la respuesta de la API');
         setContent('No se encontró contenido para este tema. Por favor, intenta con otro tema.');
@@ -146,6 +150,22 @@ const Education: React.FC = () => {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFeedback = async (isUseful: boolean) => {
+    const feedbackPrompt = isUseful
+      ? 'Este contenido me pareció muy útil y acertado y quiero que me muestres más contenido de este estilo.'
+      : 'Este contenido que me mostraste no me pareció del todo útil y quiero que me des otro enfoque.';
+
+    try {
+      await customAxios.post('/api/question', {
+        question: feedbackPrompt,
+      });
+    } catch (error: unknown) {
+      console.error('Error al enviar la retroalimentación:', error);
+    } finally {
+      setFeedbackGiven(true);
     }
   };
 
@@ -177,7 +197,15 @@ const Education: React.FC = () => {
             {loading ? (
               <p>Cargando contenido...</p>
             ) : (
-              <div dangerouslySetInnerHTML={{ __html: content }} />
+              <div>
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+                {!feedbackGiven && (
+                  <div>
+                    <Button onClick={() => handleFeedback(true)}>El contenido fue útil</Button>
+                    <Button onClick={() => handleFeedback(false)}>El contenido no fue útil</Button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
